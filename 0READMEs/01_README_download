@@ -1,0 +1,39 @@
+#! /bin/bash
+
+#
+# download data
+#
+
+. ~/.bash_aliases
+shopt -s expand_aliases
+
+ciao -o
+
+. src/functions.bash
+
+# for some reason, download_chandra_obsid no longer works on legs
+true && {
+for src in $(sources)
+do
+    mkdir -p data/$src
+    cd data/$src
+    for o in $(source2obsids $src)
+    do
+	files=evt1,bpix,pbk,msk,flt,asol,bias,stat,mtl
+	instruments $o | grep -qi HRC && files=evt1,bpix,msk,flt,asol,dtf
+	download_chandra_obsid $o $files
+    done
+    cd -
+done
+} ||
+{
+for src in $(sources)
+do
+    for o in $(source2obsids $src)
+    do
+	mkdir -p data/$src/$o
+	cp -a /data/legs/rpete/flight/xcal.orig/data/$src/$o/{primary,secondary} data/$src/$o
+    done
+done
+}
+

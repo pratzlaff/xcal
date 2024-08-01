@@ -1,0 +1,31 @@
+#! /bin/bash
+
+. src/functions.bash
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+caldbs='qe_N0016_qeu_N0015'
+
+for caldb in $caldbs
+do
+  #for type in chi2 lengths subjective
+  for type in obsflux_quick quick obsflux_simple simple
+  do
+    wmin_args=''
+    winc_args=''
+    case $type in
+      quick|simple|obsflux_quick|obsflux_simple)
+        wmin_args="--wmin $wmin"
+        winc_args="--winc $winc"
+        ;;
+    esac
+    for src in $(sources)
+    do
+      base="results/${caldb}/factors_${type}_sl_${src}_winc_${winc}"
+      /usr/bin/python3 src/factors_plot.py \
+        $src sl $caldb $type \
+        $wmin_args $winc_args \
+        -o "$base.pdf"
+    done
+  done
+done

@@ -1,0 +1,81 @@
+#! /bin/bash
+
+source functions.bash
+
+export ASCDS_OVERRIDE=1
+
+if [ `hostname` == 'legs' ]
+then
+    source /usr/local/ciao/bin/ciao.sh
+    export PERL=perl
+else
+    source /soft/ciao/bin/ciao.sh
+    export PERL=/proj/axaf/bin/perl
+fi
+
+: ${NEWGAIN:=0} ; export NEWGAIN
+
+tg_reprocess=tg_reprocess
+[ $NEWGAIN -eq 1 ] && tg_reprocess=tg_reprocess_newgain
+
+for src in $(sources)
+do
+    for o in $(source2obsids $src)
+    do
+	if [ $NEWGAIN -eq 1 ]
+	then
+	    instruments $o | grep -qi HRC && continue
+	    instruments $o | grep -qi HETG && continue
+	fi
+	evt2_bin data/$src/$o/${tg_reprocess}/*_evt2.fits 2000
+    done
+done
+
+# for a given obsid, find the tstart:tstop pairs, then
+#
+# dmcopy infile=evt2.fits[time=$tstart:$tstop] outfile=evt2_00.fits clobber=yes
+
+# for hrc,
+#
+# punlearn hrc_dtfstats
+# hrc_dtfstats infile=primary/dtf1.fits.gz outfile=dtfstats_00.fits gtifile=evt2_00.fits[gti] clobber=yes
+# punlearn 'dmhedit'
+# dmhedit evt2_00.fits 'filelist=' op=add key=LIVETIME 'value=  369.189954'
+# dmhedit evt2_00.fits 'filelist=' op=add key=DTCOR 'value=  0.994317'
+# dmhedit evt2_00.fits 'filelist=' op=add key=EXPOSURE 'value=  369.189954'
+
+# in AR Lac analysis for some reason we were running
+#
+# punlearn ardlib
+# pset ardlib 'AXAF_HRC-S_BADPIX_FILE=secondary/bpix1.fits.gz'
+
+# extract the spectrum
+#
+# punlearn tgextract
+# tgextract infile=evt2_00.fits outfile=pha2_00.fits outfile_type=pha_typeII tg_srcid_list=all tg_part_list=header_value inregion_file=CALDB tg_order_list=-1,1,-2,2,-3,3,-4,4,-5,5,-6,6,-7,7,-8,8,-9,9,-10,10 ancrfile=none respfile=none clobber=yes
+#
+# or tg_order_list=-1,-2,-3,1,2,3
+#
+
+# create aspect history for this bin
+#
+# punlearn asphist
+# asphist infile=primary/asol1.fits.gz outfile=asphist_00.fits evtfile=evt2_00.fits dtffile=primary/dtf1.fits.gz clobber=yes
+
+
+# run fullgarf
+#
+# punlearn fullgarf
+#
+# hrcs/letg
+#
+# fullgarf pha2_00.fits 1 evt2_00.fits asphist_00.fits 'grid(tg_reprocess/LEG_1.rmf[cols ENERG_LO,ENERG_HI])' primary/dtf1.fits.gz secondary/bpix1.fits.gz 00 maskfile=NONE clobber=yes
+#
+# acis/letg
+#
+# fullgarf pha2_00.fits 1 evt2_00.fits asphist_00.fits 'grid(tg_reprocess/LEG_-1.rmf[cols ENERG_LO,ENERG_HI])' ')evtfile' tg_reprocess/acis_repro_bpix1.fits 00 maskfile=secondary/msk1.fits.gz clobber=yes
+#
+# acis/hetg
+#
+# fullgarf pha2_00.fits 1 evt2_00.fits asphist_00.fits 'grid(tg_reprocess/HEG_-1.rmf[cols ENERG_LO,ENERG_HI])' ')evtfile' tg_reprocess/acis_repro_bpix1.fits 00 maskfile=./secondary/msk1.fits.gz clobber=yes
+

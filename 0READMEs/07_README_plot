@@ -1,0 +1,50 @@
+#! /bin/bash
+
+. src/functions.bash
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+for caldb in qe_N0016_qeu_N0015
+do
+
+    pdir=./plots/"$caldb"
+
+    mkdir -p "$pdir"
+
+    for src in $(sources)
+    do
+	str='' ; obsids='' ; all=''
+
+	# special HRC-S only sequence
+	false && [ "$src" = mkn421 ] && {
+	    str='hrcs_2018-01_'
+	    obsids='-o 19444 20942 20943 20944'
+	    all='--all'
+	}
+
+	for ((i=1; i <= $wn; i++))
+	do
+            let wlo="wmin+(i-1)*winc"
+            let whi="wlo+winc"
+
+	    acisrdb=''
+	    [ "$str" = '' ] && acisrdb="./rdb/acis/${src}_fits_w${wlo}-${whi}.rdb"
+
+            true && \
+                /usr/bin/python3 src/plot_fits.py $all $acisrdb ./rdb/${caldb}/${src}_fits_${str}w${wlo}-${whi}.rdb -p "$pdir/${src}_fits_${str}w${wlo}-${whi}.pdf"
+            true && \
+                /usr/bin/python3 src/plot_fits.py --noerrb $all $acisrdb ./rdb/${caldb}/${src}_fits_${str}w${wlo}-${whi}.rdb -p "$pdir/${src}_fits_${str}w${wlo}-${whi}_noerrb.pdf"
+	done
+
+	for band in 0 1 2 3 4 5
+	do
+	    acisrdb=''
+	    [ "$str" = '' ] && acisrdb="./rdb/acis/${src}_fits_B${band}.rdb"
+
+            false && \
+                /usr/bin/python3 src/plot_fits.py $all $acisrdb ./rdb/${caldb}/${src}_fits_${str}B${band}.rdb -p "$pdir/${src}_fits_${str}B${band}.pdf"
+            false && \
+                /usr/bin/python3 src/plot_fits.py --noerrb $all $acisrdb ./rdb/${caldb}/${src}_fits_${str}B${band}.rdb -p "$pdir/${src}_fits_${str}B${band}_noerrb.pdf"
+	done
+    done
+done

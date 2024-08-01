@@ -1,0 +1,5 @@
+#! /bin/bash
+
+grep HETG obsids_pks2155 | cut -f 1 | xargs python meg_heg_ratio_flux_counts.py  --combine 256 -t 'ACIS-S Calibration Observations: PKS2155-304' -p meg_heg_ratio_pks2155.pdf
+
+grep HETG obsids_mkn421 | cut -f 1 | xargs python meg_heg_ratio_flux_counts.py  --combine 256 -t 'ACIS-S Calibration Observations: Mkn 421' -p meg_heg_ratio_mkn421.pdf

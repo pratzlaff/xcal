@@ -1,0 +1,20 @@
+#! /bin/bash
+
+. src/functions.bash
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+pdir=./plots/scale_interpolate
+mkdir -p $pdir
+
+for src in $(sources)
+do
+    for band in 0 1 2 3 4 5
+    do
+	/usr/bin/python2 \
+	    src/scale_interpolate.py \
+	    ./rdb/acis/${src}_fits_B${band}.rdb \
+	    ./rdb/qe_N0014_qeu_N0013/${src}_fits_B${band}.rdb \
+	    -p $pdir/scale_interpolate_${src}_B${band}.pdf
+    done
+done

@@ -1,0 +1,44 @@
+#! /bin/bash
+
+. ~/.bash_aliases
+shopt -s expand_aliases
+
+ciao -o
+
+. src/functions.bash
+
+tgreprocess=/data/legs/rpete/flight/dev/tg_reprocess
+
+# whether to force reprocessing if tg_reprocess outdir already exists
+force=0
+
+for src in $(sources)
+do
+    for o in $(source2obsids $src)
+    do
+	# instruments $o | grep -qi hrc || continue
+
+	outdir=tg_reprocess
+	logfile=data/$src/$o/tg_reprocess.log
+
+	outdirfull=data/$src/$o/$outdir
+
+	[ -f $outdirfull/*_pha2.fits -a $force -eq 0 ] && continue
+
+	orders=''
+	badpix=''
+
+	# reprocess HRC
+	instruments $o | grep -qi hrc &&
+	{
+	    orders='--orders=10'
+	    badpix='--badpix=CALDB'
+	    pifilter='--pifilter=none'
+	}
+
+	perl $tgreprocess $pifilter $orders $badpix --nogrmf --outdir $outdir data/$src/$o 2>&1 | tee $logfile
+
+        rm -f $outdirfull/*_evt1{a,}.fits
+
+    done
+done

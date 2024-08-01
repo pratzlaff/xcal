@@ -1,0 +1,49 @@
+#! /bin/bash
+
+. src/functions.bash
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+caldb='qe_N0015_qeu_N0011'
+
+python=/usr/bin/python
+
+declare -A epochs
+epochs[pks2155]='1 2 3 4 5'
+epochs[mkn421]='1 2 3 4 5 6 7 8 9'
+
+bands='0 2 3 4'
+
+mkdir -p carma_orders/choose_orders
+
+for src in $(sources)
+do
+    rdbf="./carma_orders/${src}_sl.rdb"
+
+    cat - <<EOP > "$rdbf"
+band	epoch	p	q
+N	N	N	N
+EOP
+    
+    for b in $bands
+    do
+	for e in ${epochs[$src]}
+	do
+	    txtf="./carma_orders/choose_orders/${src}_sl_B${b}_E${e}.txt"
+	    [ -f "$txtf" ] || {
+		read min max <<<$( python3 src/minmax.py $src lengths $caldb $b $e )
+		mpirun -n 1 \
+		       $python src/scale_lengths.py \
+		       s l \
+		       ./rdb/acis/${src}_fits_B${b}.rdb \
+		       ./rdb/$caldb/${src}_fits_B${b}.rdb \
+		       -e $e \
+		       --minscale $min --maxscale $max \
+		       -c \
+		       2>&1 | tail -17 > "$txtf"
+	    }
+	    read p q <<<$(tail -1 "$txtf" | perl -nle 'print join(" ", /p = (\d+).*q =\s+(\d+)/)')
+	    echo "$b	$e	$p	$q" >> "$rdbf"
+	done
+    done
+done

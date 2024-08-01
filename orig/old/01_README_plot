@@ -1,0 +1,23 @@
+#! /bin/bash
+
+source ../functions.bash
+
+rdir=rdb
+pdir=plots
+mkdir -p "$pdir" "$rdir"
+
+for src in $(sources)
+do
+#    for band in 0 1 2 3 4 5
+    for band in 0
+    do
+	dev='vcps'
+	[ $band -eq 0 ] && dev='cps'
+
+	perl plot.pl $src $band --dev "$pdir/${src}_B${band}.ps/$dev" --rdb "$rdir/${src}_B${band}_"
+	perl plot.pl $src $band --binned --dev "$pdir/${src}_B${band}_binned.ps/$dev" --rdb "$rdir/${src}_B${band}_binned_"
+	perl plot.pl $src $band --noerrb --binned --dev "$pdir/${src}_B${band}_binned_noerrb.ps/$dev"
+
+    done
+
+done

@@ -1,0 +1,82 @@
+#! /bin/bash
+
+source /usr/local/ciao/bin/ciao.sh
+
+qe=15
+
+ddir=./data
+odir=./output/hrcs_qe$qe
+ldir=./lis
+
+mkdir -p $ddir $odir $ldir
+
+order=neg
+minorder=1
+maxorder=10
+
+sign=''
+orderstr=p
+format='%02d'
+
+if [ $order == 'neg' ]
+then
+    sign='-'
+    orderstr=m
+    format='%03d'
+fi
+
+obsids=`grep HRC ../obsids_mkn421 | grep '^[0-9]' | cut -f 1`
+
+glob='{'`perl -le 'print join ",", @ARGV' $obsids`'}'
+glob=/data/legs/rpete/flight/xcal/data/mkn421/$glob
+
+garfs=tg_reprocess/hrcs_garfs_qe$qe
+
+#
+# results in truncated command line, so output a list instead of using these
+#
+pha2=`perl -le 'print join ",", glob("'$glob'/tg_reprocess/*pha2.fits")'`
+rmf=`perl -le 'print join ",", glob("'$glob/$garfs'/LEG_-1.rmf")'`
+garf=`perl -le 'print join ",", glob("'$glob/$garfs'/*LEG_-1_garf.fits")'`
+
+lis=$ldir/pha2.lis ; rm -f $lis ; touch $lis
+for f in `perl -le 'print for glob("'$glob'/tg_reprocess/*pha2.fits")'` ; do echo $f >> $lis ; done
+
+combine_grating_spectra @$ldir/pha2.lis $odir/ order=-1 clobber=yes
+
+i=$minorder
+while [ $i -le $maxorder ]
+do
+    str=`printf $format ${sign}$i`
+
+    lis=$ldir/rmf_$str.lis ; rm -f $lis ; touch $lis
+    for f in `perl -le 'print for glob("'$glob/$garfs'/LEG_'${sign}${i}'.rmf")'` ; do echo $f >> $lis ; done
+
+    lis=$ldir/garf_$str.lis ; rm -f $lis ; touch $lis
+    for f in `perl -le 'print for glob("'$glob/$garfs'/*LEG_'${sign}${i}'_garf.fits")'` ; do echo $f >> $lis ; done
+
+    addresp \
+	infile=@$ldir/rmf_$str.lis \
+	arffile=@$ldir/garf_$str.lis \
+	phafile=@$ldir/pha2.lis \
+	outfile=$odir/${orderstr}${i}.rmf \
+	outarf=$odir/${orderstr}${i}.arf \
+	method=sum \
+	clobber=yes
+
+    (( i++ ))
+done
+
+exit
+
+rm -f $odir/*tmp*
+
+#sherpa -b LEG_neg.py
+LD_PRELOAD=/usr/lib/gcc/x86_64-linux-gnu/4.8/libgfortran.so python fit.py $qe
+LD_PRELOAD=/usr/lib/gcc/x86_64-linux-gnu/4.8/libgfortran.so python fit.py --ionabs $qe
+
+# for f in LEG_neg*.pdf
+# do
+#    #pdf270 $f -o $f 
+# done
+

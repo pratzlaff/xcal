@@ -1,0 +1,78 @@
+#! /bin/bash
+
+. src/functions.bash
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+inst=( ls mls hmls )
+bands=( 7 8 9 )
+wavmaxes=( 50 28 14 )
+wavmin=2
+
+caldbs='qe_N0014_qeu_N0014 qe_N0015_qeu_N0014 qe_N0016_qeu_N0015'
+caldbs='qe_N0016_qeu_N0015'
+
+for caldb in $caldbs
+do
+  export ARFPATH=:./arfs/acis:./arfs/$caldb
+  export QDPPATH=./xspec/$caldb
+  outdir=./count_fluxes/$caldb
+  mkdir -p $outdir
+
+  for src in $(sources)
+  do
+
+    # iterate through bands
+    false && {
+      for ((i=0; i<${#bands[@]}; i++))
+      do
+        inst=${inst[i]}
+        band=${bands[i]}
+        wavmax=${wavmaxes[i]}
+
+        rdbfile=$outdir/${src}_obsflux_B${band}.rdb
+        pdffile=$outdir/${src}_obsflux_B${band}.pdf
+
+        /usr/bin/python3 src/count_fluxes.py $src $wavmin $wavmax 2>/dev/null 1>$rdbfile -c 16
+
+        filter=''
+        [ $band -eq 7 ] && filter=-f
+        /usr/bin/python3 src/plot_fluxes.py $filter $rdbfile $inst -p $pdffile
+      done
+  }
+
+  # wavelength ranges
+    true && {
+      rdbfiles=
+      for ((i=1; i<=$wn; i++))
+      do
+	let wlo="wmin+(i-1)*winc"
+	let whi=wlo+winc
+
+        inst=hmls
+        [ $whi -gt 12 ] && inst=mls
+        [ $whi -gt 15 ] && inst=ls
+
+        rdbfile=$outdir/${src}_obsflux_w${wlo}-${whi}.rdb
+        pdffile=$outdir/${src}_obsflux_w${wlo}-${whi}.pdf
+	rdbfiles+=" $rdbfile"
+
+        /usr/bin/python3 src/count_fluxes.py $src $wlo $whi 2>/dev/null 1>$rdbfile -c 16
+
+        /usr/bin/python3 src/plot_fluxes.py $filter $rdbfile $inst -p $pdffile
+
+      done
+
+      results="./results/${caldb}"
+      /usr/bin/python3 src/scale_match_simple.py s l \
+        $rdbfiles \
+        -p "${results}/dist_obsflux_simple_sl_${src}_winc_${winc}.pdf" \
+        > "${results}/factors_obsflux_simple_sl_${src}_winc_${winc}.txt"
+
+      /usr/bin/python3 src/factors_plot.py \
+        $src sl $caldb obsflux_simple \
+        --wmin $wmin --winc $winc \
+        -o "${results}/factors_obsflux_simple_sl_${src}_winc_${winc}.pdf"
+  }
+  done
+done

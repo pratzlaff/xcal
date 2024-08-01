@@ -1,0 +1,11 @@
+#! /bin/bash
+
+. ./src/functions.bash
+
+pdir=./plots/pm_ratios
+mkdir -p $pdir
+
+for src in $(sources)
+do
+    /usr/bin/python3  ./src/pm_ratio_epochs.py $src -o $pdir/pm_ratios_${src}.pdf
+done

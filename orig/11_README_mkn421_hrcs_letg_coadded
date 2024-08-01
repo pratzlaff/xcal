@@ -1,0 +1,7 @@
+#! /bin/bash
+
+cd mkn421_hrcs_letg_coadded
+
+/bin/bash README
+
+cd -

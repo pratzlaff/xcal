@@ -1,0 +1,905 @@
+using parameter directory /tmp/oXEeH7ObMU
+punlearn 'hrc_process_events'
+
+hrc_process_events 'infile=./secondary/hrcf16430_000N001_evt1.fits.gz' 'outfile=tg_reprocess/hrcf16430_000N002_evt1.fits' 'badpixfile=./secondary/hrcf16430_000N001_bpix1.fits.gz' 'eventdef=)stdlev1' 'acaofffile=./primary/pcadf520171947N001_asol1.fits.gz' 'alignmentfile=./primary/pcadf520171947N001_asol1.fits.gz' 'instrume=hrc-s' 'clobber=yes' 'gainfile=/usr/local/ciao-4.6/CALDB/data/chandra/hrc/t_gmap/hrcsD2012-03-29t_gmapN0002.fits'
+
+# hrc_process_events (CIAO 4.6): The following error occurred 217 times:
+	WARNING: can't find a proper degap value for this raw coord. in hrcf16430_000N001_evt1.fits.gz
+
+# hrc_process_events (CIAO 4.6): The following error occurred 18 times:
+	dsHPEEVENTSEQERR -- WARNING: Out of sequence events discovered in ./secondary/hrcf16430_000N001_evt1.fits.gz.
+punlearn 'dmcoords'
+
+dmcoords './secondary/hrcf16430_000N001_evt1.fits.gz' './primary/pcadf520171947N001_asol1.fits.gz' 'option=cel' 'celfmt=deg' 'ra=166.1133' 'dec=38.2088' 'verbose=1'
+
+punlearn 'tgdetect'
+
+tgdetect 'infile=tg_reprocess/hrcf16430_000N002_evt1.fits' 'outfile=tg_reprocess/hrcf16430_000N002_src1a.fits' 'zo_pos_x=32747.46' 'zo_pos_y=32894.17' 'OBI_srclist_file=NONE' 'clobber=yes'
+
+punlearn 'tg_create_mask'
+
+tg_create_mask 'infile=tg_reprocess/hrcf16430_000N002_evt1.fits' 'outfile=tg_reprocess/hrcf16430_000N002_evt1_L1a.fits' 'input_pos_tab=tg_reprocess/hrcf16430_000N002_src1a.fits' 'grating_obs=header_value' 'clobber=yes'
+
+punlearn 'tg_resolve_events'
+
+tg_resolve_events 'infile=tg_reprocess/hrcf16430_000N002_evt1.fits' 'outfile=tg_reprocess/hrcf16430_000N002_evt1a.fits' 'regionfile=tg_reprocess/hrcf16430_000N002_evt1_L1a.fits' 'acaofffile=./primary/pcadf520171947N001_asol1.fits.gz' 'eventdef=)stdlev1_HRC' 'clobber=yes' 'osipfile=none'
+
+punlearn 'dmcopy'
+
+dmcopy 'tg_reprocess/hrcf16430_000N002_evt1a.fits[EVENTS][(tg_mlam,pi)=region(/usr/local/ciao-4.6/CALDB/data/chandra/hrc/tgpimask2/letgD1999-07-22pireg_tgmap_N0001.fits)]' 'tg_reprocess/hrcf16430_000N002_back_evt1a.fits' 'opt=all' 'clobber=yes'
+
+punlearn 'dmcopy'
+
+dmcopy 'tg_reprocess/hrcf16430_000N002_back_evt1a.fits[EVENTS][status=xxxxxx00xxxx0xxx0000x000x00000xx]' 'tg_reprocess/hrcf16430_000N002_flt1_evt1a.fits' 'clobber=yes'
+
+punlearn 'dmcopy'
+
+dmcopy 'tg_reprocess/hrcf16430_000N002_flt1_evt1a.fits[events][@./secondary/hrcf16430_000N001_std_flt1.fits.gz][cols !crsu,!crsv,!amp_sf,!av1,!av2,!av3,!au1,!au2,!au3,!raw,!sumamps]' 'tg_reprocess/hrcf16430N002_evt2.fits' 'clobber=yes'
+
+punlearn 'hrc_dtfstats'
+
+hrc_dtfstats 'infile=./primary/hrcf16430_000N001_dtf1.fits.gz' 'outfile=tg_reprocess/hrcf16430_000N002_dtfstats.fits' 'gtifile=tg_reprocess/hrcf16430N002_evt2.fits[gti]' 'clobber=yes'
+
+punlearn 'dmhedit'
+
+dmhedit 'tg_reprocess/hrcf16430N002_evt2.fits' 'filelist=' 'op=add' 'key=EXPOSURE' 'value=10096.610219'
+
+punlearn 'dmhedit'
+
+dmhedit 'tg_reprocess/hrcf16430N002_evt2.fits' 'filelist=' 'op=add' 'key=DTCOR' 'value=    0.992854'
+
+punlearn 'dmhedit'
+
+dmhedit 'tg_reprocess/hrcf16430N002_evt2.fits' 'filelist=' 'op=add' 'key=LIVETIME' 'value=10096.610219'
+
+punlearn 'dmappend'
+
+dmappend 'tg_reprocess/hrcf16430_000N002_evt1a.fits[region][subspace -time]' 'tg_reprocess/hrcf16430N002_evt2.fits'
+
+punlearn 'tgextract'
+
+tgextract 'infile=tg_reprocess/hrcf16430N002_evt2.fits' 'outfile=tg_reprocess/hrcf16430N002_pha2.fits' 'outfile_type=pha_typeII' 'tg_srcid_list=all' 'tg_part_list=header_value' 'inregion_file=CALDB' 'tg_order_list=-1,1,-2,2,-3,3,-4,4,-5,5,-6,6,-7,7,-8,8,-9,9,-10,10' 'ancrfile=none' 'respfile=none' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-1' 'outfile=tg_reprocess/LEG_-1.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=1' 'outfile=tg_reprocess/LEG_1.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '1' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_1.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-1  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+asphist infile=./primary/pcadf520171947N001_asol1.fits.gz outfile=tg_reprocess/hrcf16430N002_ah2.fits evtfile=tg_reprocess/hrcf16430N002_evt2.fits[chip_id=2] dtffile=./primary/hrcf16430_000N001_dtf1.fits.gz mode=hl
+# asphist (CIAO 4.6): WARNING: skipping 142 livetime correction records (from time: 520171658.859757 to time: 520171947.909773)
+
+
+   
+asphist infile=./primary/pcadf520171947N001_asol1.fits.gz outfile=tg_reprocess/hrcf16430N002_ah3.fits evtfile=tg_reprocess/hrcf16430N002_evt2.fits[chip_id=3] dtffile=./primary/hrcf16430_000N001_dtf1.fits.gz mode=hl
+# asphist (CIAO 4.6): WARNING: skipping 142 livetime correction records (from time: 520171658.859757 to time: 520171947.909773)
+
+
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-1 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-1.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_1.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-1 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-1.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_1.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-1_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '2' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_1.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=1  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+asphist infile=./primary/pcadf520171947N001_asol1.fits.gz outfile=tg_reprocess/hrcf16430N002_ah1.fits evtfile=tg_reprocess/hrcf16430N002_evt2.fits[chip_id=1] dtffile=./primary/hrcf16430_000N001_dtf1.fits.gz mode=hl
+# asphist (CIAO 4.6): WARNING: skipping 142 livetime correction records (from time: 520171658.859757 to time: 520171947.909773)
+
+
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=1 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_1.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_1.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=1 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_1.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_1.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_1_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-2' 'outfile=tg_reprocess/LEG_-2.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=2' 'outfile=tg_reprocess/LEG_2.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '3' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_2.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-2  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah3.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-2 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-2.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_2.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-2 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-2.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_2.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-2_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '4' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_2.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=2  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah1.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=2 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_2.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_2.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=2 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_2.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_2.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_2_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-3' 'outfile=tg_reprocess/LEG_-3.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=3' 'outfile=tg_reprocess/LEG_3.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '5' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_3.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-3  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah3.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-3 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-3.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_3.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-3 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-3.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_3.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-3_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '6' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_3.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=3  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah1.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=3 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_3.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_3.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=3 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_3.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_3.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_3_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-4' 'outfile=tg_reprocess/LEG_-4.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=4' 'outfile=tg_reprocess/LEG_4.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '7' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_4.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-4  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah3.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-4 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-4.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_4.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-4 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-4.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_4.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-4_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '8' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_4.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=4  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah1.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=4 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_4.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_4.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=4 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_4.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_4.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_4_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-5' 'outfile=tg_reprocess/LEG_-5.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=5' 'outfile=tg_reprocess/LEG_5.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '9' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_5.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-5  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah3.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-5 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-5.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_5.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-5 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-5.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_5.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-5_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '10' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_5.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=5  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah1.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=5 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_5.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_5.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=5 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_5.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_5.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_5_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-6' 'outfile=tg_reprocess/LEG_-6.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=6' 'outfile=tg_reprocess/LEG_6.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '11' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_6.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-6  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah3.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-6 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-6.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_6.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-6 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-6.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_6.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-6_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '12' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_6.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=6  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah1.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=6 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_6.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_6.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=6 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_6.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_6.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_6_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-7' 'outfile=tg_reprocess/LEG_-7.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=7' 'outfile=tg_reprocess/LEG_7.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '13' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_7.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-7  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah3.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-7 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-7.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_7.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-7 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-7.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_7.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-7_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '14' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_7.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=7  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah1.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=7 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_7.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_7.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=7 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_7.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_7.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_7_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-8' 'outfile=tg_reprocess/LEG_-8.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=8' 'outfile=tg_reprocess/LEG_8.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '15' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_8.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-8  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah3.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-8 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-8.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_8.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-8 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-8.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_8.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-8_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '16' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_8.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=8  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah1.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=8 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_8.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_8.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=8 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_8.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_8.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_8_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-9' 'outfile=tg_reprocess/LEG_-9.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=9' 'outfile=tg_reprocess/LEG_9.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '17' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_9.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-9  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah3.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-9 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-9.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_9.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-9 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-9.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_9.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-9_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '18' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_9.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=9  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah1.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=9 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_9.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_9.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=9 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_9.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_9.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_9_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=-10' 'outfile=tg_reprocess/LEG_-10.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgrmf'
+
+mkgrmf 'grating_arm=LEG' 'order=10' 'outfile=tg_reprocess/LEG_10.rmf' 'srcid=1' 'detsubsys=HRC-S2' 'threshold=1e-06' 'obsfile=tg_reprocess/hrcf16430N002_pha2.fits[SPECTRUM]' 'regionfile=tg_reprocess/hrcf16430N002_pha2.fits' 'wvgrid_arf=compute' 'wvgrid_chan=compute' 'verbose=0' 'clobber=yes'
+
+punlearn 'mkgarf'
+
+punlearn 'fullgarf'
+
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '19' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_10.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=-10  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 2 3 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah3.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 2 3 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S2 order=-10 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_-10.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_10.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S3 order=-10 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S3_LEG_-10.fits asphistfile=tg_reprocess/hrcf16430N002_ah3.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_10.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 2 3 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_-10_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  
+/bin/sh '/usr/local/ciao-4.6/contrib/bin/fullgarf' 'tg_reprocess/hrcf16430N002_pha2.fits' '20' 'tg_reprocess/hrcf16430N002_evt2.fits' './primary/pcadf520171947N001_asol1.fits.gz' 'grid(tg_reprocess/LEG_10.rmf[cols ENERG_LO,ENERG_HI])' './primary/hrcf16430_000N001_dtf1.fits.gz' './secondary/hrcf16430_000N001_bpix1.fits.gz' 'tg_reprocess/hrcf16430N002' 'maskfile=NONE' 'clobber=no'
+
+Will use /tmp/oXEeH7ObMU/fullgarf.par for the parameter file.
+   
+/tmp/oXEeH7ObMU/fullgarf.par contains 14 parameters . . . 
+   
+Getting the pha file type . . .
+Grating arm is LEG, order=10  
+Source location is X=32737.36328125, Y=32903.38671875 
+  
+Detector is HRC 
+Will run asphist for chip_id= 1 2 
+  
+   
+ 
+tg_reprocess/hrcf16430N002_ah1.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+ 
+tg_reprocess/hrcf16430N002_ah2.fits.gz already 
+exists. Cannot clobber . . . skipping
+   
+Finished processing aspect histograms for chip_id= 1 2 
+Will run mkgarf for the same chip_id list 
+   
+mkgarf detsubsys=HRC-S1 order=10 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S1_LEG_10.fits asphistfile=tg_reprocess/hrcf16430N002_ah1.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_10.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+mkgarf detsubsys=HRC-S2 order=10 grating_arm=LEG outfile=tg_reprocess/hrcf16430N002_S2_LEG_10.fits asphistfile=tg_reprocess/hrcf16430N002_ah2.fits[ASPHIST] obsfile=tg_reprocess/hrcf16430N002_evt2.fits engrid=grid(tg_reprocess/LEG_10.rmf[cols ENERG_LO,ENERG_HI]) osipfile=CALDB dafile=CALDB pbkfile= maskfile=NONE mirror=HRMA sourcepixelx=32737.36328125 sourcepixely=32903.38671875 mode=hl verb=0
+   
+   
+Finished processing grating arfs for chip_id= 1 2 
+   
+dmarfadd @thisfile.istemporary tg_reprocess/hrcf16430N002LEG_10_garf.fits
+  
+/usr/local/ciao-4.6/contrib/bin/fullgarf finished. 
+  

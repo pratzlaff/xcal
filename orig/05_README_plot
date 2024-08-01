@@ -1,0 +1,31 @@
+#! /bin/bash
+
+source functions.bash
+
+pdir=plots
+mkdir -p "$pdir"
+
+for src in $(sources)
+do
+#    for band in 0 1 2 3 4 5 6
+    for band in 6
+    do
+	dev='vcps'
+	[ $band -eq 0 ] && dev='cps'
+
+	perl plot.pl $src $band --dev "$pdir/${src}_B${band}.ps/$dev" --rdb "$pdir/${src}_B${band}_"
+	perl plot.pl $src $band --binned --dev "$pdir/${src}_B${band}_binned.ps/$dev" --rdb "$pdir/${src}_B${band}_binned_"
+	perl plot.pl $src $band --noerrb --binned --dev "$pdir/${src}_B${band}_binned_noerrb.ps/$dev"
+
+	if [ $band -eq 6 ]
+	then
+	    perl plot.pl $src $band --newgain --dev "$pdir/${src}_B${band}_newgain.ps/$dev" --rdb "$pdir/${src}_B${band}_newgain_"
+	    perl plot.pl $src $band --newgain --binned --dev "$pdir/${src}_B${band}_binned_newgain.ps/$dev" --rdb "$pdir/${src}_B${band}_binned_newgain_"
+	    perl plot.pl $src $band --newgain --noerrb --binned --dev "$pdir/${src}_B${band}_binned_noerrb_newgain.ps/$dev"
+	fi
+    done
+
+done
+
+perl plot_ECR.pl mkn421 6 --binned --dev "$pdir/mkn421_B6_binned_ECR.ps/vcps"
+perl plot_ECR.pl mkn421 6 --newgain --binned --dev "$pdir/mkn421_B6_binned_newgain_ECR.ps/vcps"

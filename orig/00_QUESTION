@@ -1,0 +1,68 @@
+# Filtering on a time range DOES update the exposure keywords, but
+# DOES NOT update the GTI. As a result, the correct aspect solution
+# cannot be computed for the time-filtered event list.
+
+$ cd /data/legs/rpete/flight/xcal/data/mkn421/15477/tg_reprocess
+
+$ dmlist *evt2.fits'[gti7]' data
+
+--------------------------------------------------------------------------------
+Data for Table Block GTI7
+--------------------------------------------------------------------------------
+
+ROW    START                STOP
+
+     1 488997364.0345209837 489012010.4986100197
+
+$ dmstat *evt2.fits'[col time]' | head -3
+time[s]
+    min:        488997365.26          @:        1
+    max:        489012009.42          @:        478786
+
+$ dmlist  *evt2.fits'[gti7]' data
+--------------------------------------------------------------------------------
+Data for Table Block GTI7
+--------------------------------------------------------------------------------
+
+ROW    START                STOP
+
+     1 488997364.0345209837 489012010.4986100197
+
+$ dmlist *evt2.fits header | grep -i exposure
+0097 TIMEDELA                     2.541040               Real8        Inferred duration of primary exposure (s)
+0128 EXPOSURE                 14409.910990220 [s]        Real8        Exposure time
+0129 EXPOSUR7                 14409.910990220 [s]        Real8        Exposure time
+0130 EXPOSUR4                 14409.9513673920 [s]       Real8        Exposure time
+0131 EXPOSUR5                 14409.8706130490 [s]       Real8        Exposure time
+0132 EXPOSUR6                 14409.8302358770 [s]       Real8        Exposure time
+0133 EXPOSUR8                 14409.7898587060 [s]       Real8        Exposure time
+0134 EXPOSUR9                 14409.7494815340 [s]       Real8        Exposure time
+
+$ punlearn dmcopy
+
+$ dmcopy *evt2.fits'[time=488998000:488999000]' evt2_00.fits opt=all clobber=yes
+
+$ dmlist  evt2_00.fits'[gti7]' data
+--------------------------------------------------------------------------------
+Data for Table Block GTI7
+--------------------------------------------------------------------------------
+
+ROW    START                STOP
+
+     1 488997364.0345209837 489012010.4986100197
+
+$ dmstat evt2_00.fits'[col time]' | head -3
+time[s]
+    min:        488998000.53          @:        1
+    max:        488998999.36          @:        31541
+
+$ dmlist evt2_00.fits header | grep -i exposure
+0097 TIMEDELA                     2.541040               Real8        Inferred duration of primary exposure (s)
+0128 EXPOSURE                   983.8491326386 [s]       Real8        Exposure time
+0129 EXPOSUR7                   983.8491326386 [s]       Real8        Exposure time
+0130 EXPOSUR4                   983.8491326386 [s]       Real8        Exposure time
+0131 EXPOSUR5                   983.8491326386 [s]       Real8        Exposure time
+0132 EXPOSUR6                   983.8491326386 [s]       Real8        Exposure time
+0133 EXPOSUR8                   983.8491326386 [s]       Real8        Exposure time
+0134 EXPOSUR9                   983.8491326386 [s]       Real8        Exposure time
+

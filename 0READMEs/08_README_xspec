@@ -1,0 +1,167 @@
+#! /bin/bash
+
+obsids="$@"
+
+<<'COMMENT'
+. ./src/functions.bash
+. /data/legs/rpete/flight/analysis_functions/util.bash
+obsids=$(source2obsids mkn421)
+obsids=$(grep -h '^[0-9]' obsids/mkn421  | grep -i hrc | cut -f1)
+screen -dmS xspec bash -c 'exec bash'
+n=6
+for i in {1..6}
+do
+  o=$(i_of_n $i $n $obsids)
+  screen -S xspec -X screen bash -c "time /bin/bash 0READMEs/08_README_xspec $o; exec bash"
+done
+screen -rS xspec
+COMMENT
+
+. ~/.bash_aliases
+shopt -s expand_aliases
+
+heainit
+ciao -o
+
+. src/functions.bash
+
+run_xspec()
+{
+    local src="$1"
+    local obsid="$2"
+    local det="$3"
+    local arm="$4"
+    local orders="$5"
+    local outdir="$6"
+    local arfpath="$7"
+    local rmfpath="$8"
+    local snr="$9"
+    local binned="${10}"
+
+    local band=
+    local wmin=
+    local wax=
+
+    case $# in
+	11)
+	    band="${11}"
+	    ;;
+	12)
+	    wmin="${11}"
+	    wmax="${12}"
+	    ;;
+	*)
+	    echo whoops 1>&2
+    esac
+
+    env \
+	SOURCE=$src \
+	OBSID=$obsid \
+	DET=$det \
+	ARM=$arm \
+	ORDERS=$orders \
+	OUTDIR=$outdir \
+	ARFPATH=$arfpath \
+	RMFPATH=$rmfpath \
+	SNR=$snr \
+	BINNED=$binned \
+	BAND=$band \
+	WMIN=$wmin \
+	WMAX=$wmax \
+	xspec - src/fit.xcm
+}
+
+caldbs=( qe_N0016_qeu_N0015 )
+
+for o in $obsids
+do
+  src=$(obsid2source $o)
+
+  wrange=0
+  [ $o -eq 19444 ] || [ $o -ge 20942 -a $o -le 20944 ] && {
+    wrange=1
+    snr=50
+  }
+
+  # make the XSPEC-specific files
+  [ -f data/$src/$o/tg_reprocess/*_npha2.fits ] || {
+
+    # the binspec script removes the npha2 files but not bkg2,
+    # and fcopy doesn't like that
+    rm -f ./data/$src/$o/tg_reprocess/*bkg2*.fits
+
+    for f in ./data/$src/$o/tg_reprocess/pha2_??.fits ./data/$src/$o/tg_reprocess/*_pha2.fits
+    do
+      ../acis_letg_cedge/grating2xspec "$f" both
+    done
+  }
+
+  inst=$(instruments $o)
+  arms=LEG
+
+  shopt -s nocasematch
+
+  [[ $inst =~ acis ]] && {
+    continue
+    arfpaths=(./arfs/acis)
+    outdirs=(./xspec/acis)
+    [[ $inst =~ hetg ]] && arms='MEG HEG'
+    det=ACIS-S
+    snr=50
+  }
+
+  [[ $inst =~ hrc ]] && {
+    arfpaths=()
+    outdirs=()
+    for ((i=0; i<${#caldbs[@]}; i++))
+    do
+      c=${caldbs[i]}
+      outdirs+=(./xspec/$c)
+      arfpaths+=(./arfs/$c)
+    done
+    det=HRC-S
+    snr=20
+  }
+
+  for ((i=0; i<${#arfpaths[@]}; i++))
+  do
+    arfpath=${arfpaths[i]}
+    outdir=${outdirs[i]}
+    mkdir -p $outdir
+
+    for arm in $arms
+    do
+      for orders in neg pos
+      do
+	run_xspec \
+	  $src \
+	  $o \
+	  $det \
+	  $arm \
+	  $orders \
+	  $outdir \
+	  $arfpath \
+	  /data/legs/rpete/flight/rmfs \
+	  $snr \
+	  1 `#binned` \
+	  0  `#band=0`
+
+	[ $wrange -eq 1 ] &&
+	  run_xspec \
+	      $src \
+	      $o \
+	      $det \
+	      $arm \
+	      $orders \
+	      $outdir \
+	      $arfpath \
+	      /data/legs/rpete/flight/rmfs \
+	      $snr \
+	      1 \
+	      1.5 `#1.5-90 AA` \
+	      90
+
+      done # for order
+    done # for arm
+  done # iterating over arfpaths
+done # for obsid

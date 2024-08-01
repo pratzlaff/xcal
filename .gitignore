@@ -1,0 +1,9 @@
+*~
+arfs/
+count_fluxes/
+data/
+fits/
+plots/
+results/*/*.pdf
+src/__pycache__
+xspec/

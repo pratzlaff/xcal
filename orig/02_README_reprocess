@@ -1,0 +1,59 @@
+#! /bin/bash
+
+source functions.bash
+
+export ASCDS_OVERRIDE=1
+
+if [ `hostname` == 'legs' ]
+then
+    source /usr/local/ciao/bin/ciao.sh
+    PERL=perl
+else
+    source /soft/ciao/bin/ciao.sh
+    PERL=/proj/axaf/bin/perl
+fi
+
+tgreprocess=/data/legs/rpete/flight/dev/tg_reprocess
+
+# whether to force reprocessing if tg_reprocess outdir already exists
+force=0
+
+: ${NEWGAIN:=0} ; export NEWGAIN
+
+for src in $(sources)
+do
+    for o in $(source2obsids $src)
+    do
+	outdir=tg_reprocess
+	logfile=data/$src/$o/tg_reprocess.log
+
+	if [ $NEWGAIN -eq 1 ]
+	then
+	    outdir=tg_reprocess_newgain
+	    logfile=data/$src/$o/tg_reprocess_newgain.log
+	fi
+	
+	outdirfull=data/$src/$o/$outdir
+
+	[ -f $outdirfull/*_pha2.fits -a $force -eq 0 ] && continue
+
+	# reprocess HRC
+	if instruments $o | grep -qi HRC
+	then
+	    [ $NEWGAIN -eq 1 ] && continue
+	    $PERL $tgreprocess --orders=10 --nogrmf --outdir $outdir data/$src/$o 2>&1 | tee $logfile
+
+	# reprocess ACIS-S
+	else
+	    gainfile=
+	    if [ $NEWGAIN -eq 1 ]
+	    then
+		instruments $o | grep -qi HETG && continue
+		gainfile='--gainfile=/data/legs/rpete/flight/xcal/gain-bicti-tweak-v1-20150716.fits'
+	    fi
+	    $PERL $tgreprocess $gainfile --outdir $outdir data/$src/$o 2>&1 | tee $logfile
+	fi
+
+    done
+#    rm -f data/$src/$o/$outdir/*_evt1{a,}.fits
+done

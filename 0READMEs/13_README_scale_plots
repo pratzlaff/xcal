@@ -1,0 +1,73 @@
+#! /bin/bash
+
+. src/functions.bash
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+caldbs='qe_N0016_qeu_N0015'
+
+pdfdir=./plots/scale_lengths
+
+declare -A epochs
+epochs[pks2155]='1 2 3 4 5'
+epochs[mkn421]='1 2 3 4 5 6 7 8 9 10'
+
+bands='0 2 3 4'
+bands=
+
+sources=$(sources)
+
+for caldb in $caldbs
+do
+  outdir=$pdfdir/$caldb
+  mkdir -p $outdir
+
+  for src in $sources
+  do
+    nepochs=$(ngroups $src)
+    epochs=$(perl -le "print join ' ', @{[1..$nepochs]}")
+
+    for e in $epochs
+    do
+      e=$(printf %02d $e)
+      for ((i=1; i<=$wn; i++))
+      do
+        let wlo="wmin+(i-1)*winc"
+        let whi="wlo+winc"
+        min=90 && max=130
+
+	true &&
+	  /usr/bin/python3 src/scale_plots.py \
+	    s l $e \
+	    ./rdb/acis/${src}_fits_w${wlo}-${whi}.rdb \
+	    ./rdb/$caldb/${src}_fits_w${wlo}-${whi}.rdb \
+	    --minscale $min --maxscale $max \
+	    -p $outdir/scales_${src}_sl_w${wlo}-${whi}_E${e}.pdf
+
+	true &&
+	  /usr/bin/python3 src/scale_plots.py \
+	    s l $e \
+	    ./count_fluxes/$caldb/${src}_obsflux_w${wlo}-${whi}.rdb \
+	    --minscale $min --maxscale $max \
+	    -p $outdir/scales_${src}_sl_obsflux_w${wlo}-${whi}_E${e}.pdf
+      done
+
+      false && {
+        for b in $bands
+	do
+
+	  read min max <<<$( python3 src/minmax.py $src plots $caldb $b $e )
+	  min=$(echo "$min-5" | bc)
+	  max=$(echo "$max+5" | bc)
+	  /usr/bin/python3 src/scale_plots.py \
+            s l $e \
+	    ./rdb/acis/${src}_fits_B${b}.rdb \
+	    ./rdb/$caldb/${src}_fits_B${b}.rdb \
+	    --minscale $min --maxscale $max \
+	    -p $outdir/scales_${src}_sl_B${b}_E${e}.pdf
+	done
+      }
+    done
+  done
+done
+

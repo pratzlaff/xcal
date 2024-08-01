@@ -1,0 +1,18 @@
+#! /bin/bash
+
+source functions.bash
+
+python=/usr/bin/python
+pdir=./plots/hrcs_scale
+mkdir -p "$pdir"
+
+for src in $(sources)
+do
+    $python scale_mdl.py $src 7 12
+    for e in 1 2 3 4 5
+    do
+	$python scale_mdl.py $src 1 6 -e $e
+    done
+done
+
+mv mdl*.pdf "$pdir" 2>/dev/null

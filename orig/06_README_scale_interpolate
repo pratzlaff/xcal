@@ -1,0 +1,15 @@
+#! /bin/bash
+
+source functions.bash
+
+python=/usr/bin/python
+pdir=./plots/hrcs_scale
+mkdir -p "$pdir"
+
+bands='0 2 3 4'
+
+for b in $bands
+do
+    $python scale_interpolate.py -b $b
+done
+mv hrc_scale_interpolate_*pdf "$pdir" 2>/dev/null

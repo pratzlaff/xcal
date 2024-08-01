@@ -1,0 +1,168 @@
+query no
+set maxorder 10
+
+set outdir $env(OUTDIR)
+set arfpath $env(ARFPATH)
+set rmfpath $env(RMFPATH)
+set source $env(SOURCE)
+set obsid $env(OBSID)
+set arm $env(ARM)
+set orders $env(ORDERS)
+set det $env(DET)
+set snr $env(SNR)
+
+set binned 0
+catch { set binned $env(BINNED) }
+
+if { ! [ catch { set band $env(BAND) } ] } {
+    set suffix B${band}
+    if { $band == 0 } {
+        set wmin [ expr 12.39854/8 ]
+        set wmax [ expr 12.39854/0.5 ]
+    } elseif { $band == 1 } {
+        set wmin [ expr 12.39854/0.54 ]
+        set wmax [ expr 12.39854/0.33 ]
+    } elseif { $band == 2 } {
+        set wmin [ expr 12.39854/0.85 ]
+        set wmax [ expr 12.39854/0.54 ]
+    } elseif { $band == 3 } {
+        set wmin [ expr 12.39854/1.5 ]
+        set wmax [ expr 12.39854/0.85 ]
+    } elseif { $band == 4 } {
+        set wmin [ expr 12.39854/4 ]
+        set wmax [ expr 12.39854/1.5 ]
+    } elseif { $band == 5 } {
+        set wmin [ expr 12.39854/10 ]
+        set wmax [ expr 12.39854/4 ]
+    } else {
+        puts stderr "Do not recognize band ${band}, exiting."
+        exit 1
+    }
+} else {
+    set wmin $env(WMIN)
+    set wmax $env(WMAX)
+    set suffix w${wmin}-${wmax}
+}
+
+# if integers were input, get decimal places into the ignore command
+set wmin [ expr $wmin - 0.00001 ]
+set wmax [ expr $wmax - 0.00001 ]
+
+set orderstr ""
+if { $orders eq "neg" } {
+  set orderstr "-"
+}
+
+if { $det eq "HRC-S" } {
+    set fileglob hrc
+    set row 2
+    if { $orders eq "neg" } {
+	set row 1
+    }
+} elseif { $det eq "ACIS-S" } {
+    set fileglob acis
+    set maxorder 1
+    if { $arm eq "HEG" } {
+	set row 4
+	if { $orders eq "neg" } {
+	    set row 1
+	}
+    } elseif { $arm eq "MEG" } {
+	set row 10
+	if { $orders eq "neg" } {
+	    set row 7
+	}
+    } elseif { $arm eq "LEG" } {
+	set row 4
+	if { $orders eq "neg" } {
+	    set row 1
+	}
+    }
+}
+
+set datafiles [glob data/${source}/${obsid}/tg_reprocess/${fileglob}f*${obsid}N0??_npha2.fits]
+if { $binned } {
+    foreach f [lsort [glob data/${source}/${obsid}/tg_reprocess/npha2_??.fits]] {
+	lappend datafiles $f
+    }
+}
+
+set k -1
+
+if { $source eq "mkn421" } {
+    set nH 0.0161
+} elseif { $source eq "pks2155" } {
+    set nH 0.0142
+}
+
+foreach f $datafiles {
+    data ${f}{${row}}
+
+    for { set i 1 } { $i <= $maxorder } { incr i } {
+	response $i: ${rmfpath}/${det}-${arm}_${orderstr}${i}.rmf
+	arf $i: ${arfpath}/${obsid}_${arm}_${orderstr}${i}_garf.fits
+    }
+
+    setplot wave
+
+    ignore 1-2:0.-${wmin},${wmax}-**
+
+    statistic lstat
+    method leven 10 0.01
+    abund wilm
+
+    if {$k == -1} {
+	model  1:m1 tbabs*logpar
+	$nH    -0.01
+	2.0       0.01
+	0.5       0.01
+	1.0      -0.01
+	0.3       0.01
+
+	for { set i 2 } { $i <= $maxorder } { incr i } {
+	    model  $i:m$i tbabs*logpar
+	    = m1:1
+	    = m1:2
+	    = m1:3
+	    = m1:4
+	    = m1:5
+	}
+    }
+
+    fit
+
+    set outfile [format "%s/%s_%s_%s_%s" $outdir $obsid $arm $orders $suffix]
+
+    if {$k > -1} {
+	set outfile [format "%s_%02d" $outfile $k]
+    }
+
+    set logfile "${outfile}.log"
+    set plotfile "${outfile}.ps/cps"
+    set qdpfile "${outfile}.qdp"
+
+    log ${logfile}
+    show all
+    log none
+
+    setplot delete all
+
+    if { $maxorder > 1 } {
+	for { set i 1 } { $i <= $maxorder } { incr i } {
+	    set j [expr $i+2]
+	    setplot command color [expr $i+1] on $j
+	}
+    }
+
+    file delete ${qdpfile}
+    setplot rebin ${snr} 1000
+    setplot command wdata ${qdpfile}
+    setplot xlog off
+    cpd ${plotfile}
+    plot ldata ratio
+    # cpd /xs
+    # plot ldata ratio
+    # error 1. m1:2 m1:3
+    incr k
+}
+exit

@@ -1,0 +1,62 @@
+#! /bin/bash
+
+. src/functions.bash
+
+[ `hostname` == 'legs' ] &&
+    . /usr/local/ciao/bin/ciao.sh -o ||
+    . /soft/ciao/bin/ciao.sh
+
+# Something in chips is causing the Xorg server to consume more and
+# more memory as the fits go on. Workaround for now is to use a dummy
+# Xorg server.
+#
+# d=101; sudo Xorg -noreset +extension GLX +extension RANDR +extension RENDER -logfile ./$d.log -config ./xorg.conf :d
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+hrccals=( qe_N0015_qeu_N0013 )
+
+for band in 0 1 2 3 4 5
+do
+    for src in $(sources)
+    do
+	for o in $(source2obsids $src)
+	do
+	    inst=$(instruments $o)
+
+	    echo "$inst" | grep -qi hetg || continue
+
+	    parts=LEG
+	    orders='neg pos'
+	    echo "$inst" | grep -qi hetg && {
+		parts='HEG MEG'
+		[ $band -eq 1 ] && continue
+		[ $band -eq 2 ] && parts='MEG'
+	    }
+
+	    for part in $parts
+	    do
+		for order in $orders
+		do
+		    if echo "$inst" | grep -qi hrc
+		    then
+			for hrccal in "${hrccals[@]}"
+			do
+			    export ARFPATH=./arfs/"$hrccal"
+			    fdir=./fits/"$hrccal"
+			    pdir="$fdir"/plots
+			    mkdir -p "$fdir" "$pdir"
+			    python src/fit.py ./data/$src/$o/tg_reprocess $part $order -f $fdir -p $pdir -b $band --samp
+			done
+		    else
+			export ARFPATH=./arfs/acis
+			fdir=./fits/acis
+			pdir="$fdir"/plots
+			mkdir -p "$fdir" "$pdir"
+			python src/fit.py ./data/$src/$o/tg_reprocess $part $order -f $fdir -p $pdir -b $band --samp
+		    fi
+		done
+	    done
+	done
+    done
+done

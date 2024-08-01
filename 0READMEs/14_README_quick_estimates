@@ -1,0 +1,44 @@
+#! /bin/bash
+
+. ./src/functions.bash
+
+caldbs='qe_N0016_qeu_N0015'
+srcs=pks2155
+
+#for src in $(sources)
+for src in $srcs
+do
+    nepochs=$(ngroups $src)
+    for obsflux in '' 'obsflux_'
+    do
+	for caldb in $caldbs
+	do
+	    outfile=./results/$caldb/factors_${obsflux}quick_sl_${src}_winc_${winc}.txt.new
+	    outfile_mv=./results/$caldb/factors_${obsflux}quick_sl_${src}_winc_${winc}.txt
+
+	    [ -f $outfile ] && {
+		echo "$outfile already exitst, skipping."
+		read -p "Press Enter to continue." jnk
+		continue
+	    }
+
+	    e=0
+	    while [ $e -lt $nepochs ]
+	    do
+		(( ++e ))
+		for ((i=1; i<=$wn; i++))
+		do
+		    let w1="wmin+(i-1)*winc"
+		    let w2="w1+winc"
+		    evince ./plots/scale_lengths/$caldb/scales_${src}_sl_${obsflux}w${w1}-${w2}_E$(printf "%02d" $e)*;
+		    read val;
+		    echo -n "$val " >> "$outfile";
+		done
+		echo >> "$outfile"
+	    done
+	    echo "You may now want to mv '${outfile}' '${outfile_mv}'"
+	    read -p "Press ENTER to continue." jnk
+	done
+    done
+done
+

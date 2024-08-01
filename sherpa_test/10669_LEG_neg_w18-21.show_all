@@ -1,0 +1,1766 @@
+Data Set: 1
+Filter: 18.0062-21.0062 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 14784-15024
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = Float64[16384]
+quality        = Float64[16384]
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = True
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+background_ids = [1, 2]
+
+RMF Data Set: 1:1
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-1.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:1
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-1_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+RMF Data Set: 1:2
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-2.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:2
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-2_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+RMF Data Set: 1:3
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-3.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:3
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-3_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+RMF Data Set: 1:4
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-4.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:4
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-4_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+RMF Data Set: 1:5
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-5.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:5
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-5_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+RMF Data Set: 1:6
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-6.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:6
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-6_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+RMF Data Set: 1:7
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-7.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:7
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-7_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+RMF Data Set: 1:8
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-8.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:8
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-8_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+RMF Data Set: 1:9
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-9.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:9
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-9_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+RMF Data Set: 1:10
+name     = /data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003/HRC-S-LEG_-10.rmf
+detchans = 16384
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+n_grp    = UInt64[16384]
+f_chan   = UInt32[16384]
+n_chan   = UInt32[16384]
+matrix   = Float64[1640230]
+offset   = 1
+e_min    = Float64[16384]
+e_max    = Float64[16384]
+ethresh  = 1e-10
+
+ARF Data Set: 1:10
+name     = ./arfs/qe_N0016_qeu_N0015/10669_LEG_-10_garf.fits
+energ_lo = Float64[16384]
+energ_hi = Float64[16384]
+specresp = Float64[16384]
+bin_lo   = Float64[16384]
+bin_hi   = Float64[16384]
+exposure = 10045.591243863
+ethresh  = 1e-10
+
+Background Data Set: 1:1
+Filter: 18.0062-21.0062 Wavelength (Angstrom)
+Noticed Channels: 14784-15024
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = Float64[16384]
+quality        = Float64[16384]
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = True
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 1:2
+Filter: 18.0062-21.0062 Wavelength (Angstrom)
+Noticed Channels: 14784-15024
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = Float64[16384]
+quality        = Float64[16384]
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = True
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 10
+Filter: 18.0012-20.9987 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 8065-9264
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 10:1
+Filter: 18.0012-20.9987 Wavelength (Angstrom)
+Noticed Channels: 8065-9264
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 10:2
+Filter: 18.0012-20.9987 Wavelength (Angstrom)
+Noticed Channels: 8065-9264
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 11
+Filter: 17.9990-20.9990 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 6385-7825
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 11:1
+Filter: 17.9990-20.9990 Wavelength (Angstrom)
+Noticed Channels: 6385-7825
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 11:2
+Filter: 17.9990-20.9990 Wavelength (Angstrom)
+Noticed Channels: 6385-7825
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 12
+Filter: 17.9990-20.9990 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 6385-7825
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 12:1
+Filter: 17.9990-20.9990 Wavelength (Angstrom)
+Noticed Channels: 6385-7825
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 12:2
+Filter: 17.9990-20.9990 Wavelength (Angstrom)
+Noticed Channels: 6385-7825
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 13
+Filter: 17.9991-21.0009 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 4704-6385
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 13:1
+Filter: 17.9991-21.0009 Wavelength (Angstrom)
+Noticed Channels: 4704-6385
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 13:2
+Filter: 17.9991-21.0009 Wavelength (Angstrom)
+Noticed Channels: 4704-6385
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 14
+Filter: 17.9991-21.0009 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 4704-6385
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 14:1
+Filter: 17.9991-21.0009 Wavelength (Angstrom)
+Noticed Channels: 4704-6385
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 14:2
+Filter: 17.9991-21.0009 Wavelength (Angstrom)
+Noticed Channels: 4704-6385
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 15
+Filter: 17.9992-21.0008 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 3024-4945
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 15:1
+Filter: 17.9992-21.0008 Wavelength (Angstrom)
+Noticed Channels: 3024-4945
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 15:2
+Filter: 17.9992-21.0008 Wavelength (Angstrom)
+Noticed Channels: 3024-4945
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 16
+Filter: 17.9992-21.0008 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 3024-4945
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 16:1
+Filter: 17.9992-21.0008 Wavelength (Angstrom)
+Noticed Channels: 3024-4945
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 16:2
+Filter: 17.9992-21.0008 Wavelength (Angstrom)
+Noticed Channels: 3024-4945
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 17
+Filter: 18.0007-20.9993 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 1345-3504
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 17:1
+Filter: 18.0007-20.9993 Wavelength (Angstrom)
+Noticed Channels: 1345-3504
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 17:2
+Filter: 18.0007-20.9993 Wavelength (Angstrom)
+Noticed Channels: 1345-3504
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 18
+Filter: 18.0007-20.9993 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 1345-3504
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 18:1
+Filter: 18.0007-20.9993 Wavelength (Angstrom)
+Noticed Channels: 1345-3504
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 18:2
+Filter: 18.0007-20.9993 Wavelength (Angstrom)
+Noticed Channels: 1345-3504
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 19
+Filter: 17.9994-20.5794 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 1-2065
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 19:1
+Filter: 17.9994-20.5794 Wavelength (Angstrom)
+Noticed Channels: 1-2065
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 19:2
+Filter: 17.9994-20.5794 Wavelength (Angstrom)
+Noticed Channels: 1-2065
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 2
+Filter: 18.0062-21.0062 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 14784-15024
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 2:1
+Filter: 18.0062-21.0062 Wavelength (Angstrom)
+Noticed Channels: 14784-15024
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 2:2
+Filter: 18.0062-21.0062 Wavelength (Angstrom)
+Noticed Channels: 14784-15024
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 20
+Filter: 17.9994-20.5794 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 1-2065
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 20:1
+Filter: 17.9994-20.5794 Wavelength (Angstrom)
+Noticed Channels: 1-2065
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 20:2
+Filter: 17.9994-20.5794 Wavelength (Angstrom)
+Noticed Channels: 1-2065
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 3
+Filter: 18.0031-20.9969 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 13105-13584
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 3:1
+Filter: 18.0031-20.9969 Wavelength (Angstrom)
+Noticed Channels: 13105-13584
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 3:2
+Filter: 18.0031-20.9969 Wavelength (Angstrom)
+Noticed Channels: 13105-13584
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 4
+Filter: 18.0031-20.9969 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 13105-13584
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 4:1
+Filter: 18.0031-20.9969 Wavelength (Angstrom)
+Noticed Channels: 13105-13584
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 4:2
+Filter: 18.0031-20.9969 Wavelength (Angstrom)
+Noticed Channels: 13105-13584
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 5
+Filter: 18.0021-21.0021 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 11424-12144
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 5:1
+Filter: 18.0021-21.0021 Wavelength (Angstrom)
+Noticed Channels: 11424-12144
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 5:2
+Filter: 18.0021-21.0021 Wavelength (Angstrom)
+Noticed Channels: 11424-12144
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 6
+Filter: 18.0021-21.0021 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 11424-12144
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 6:1
+Filter: 18.0021-21.0021 Wavelength (Angstrom)
+Noticed Channels: 11424-12144
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 6:2
+Filter: 18.0021-21.0021 Wavelength (Angstrom)
+Noticed Channels: 11424-12144
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 7
+Filter: 17.9984-20.9984 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 9745-10705
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 7:1
+Filter: 17.9984-20.9984 Wavelength (Angstrom)
+Noticed Channels: 9745-10705
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 7:2
+Filter: 17.9984-20.9984 Wavelength (Angstrom)
+Noticed Channels: 9745-10705
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 8
+Filter: 17.9984-20.9984 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 9745-10705
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 8:1
+Filter: 17.9984-20.9984 Wavelength (Angstrom)
+Noticed Channels: 9745-10705
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 8:2
+Filter: 17.9984-20.9984 Wavelength (Angstrom)
+Noticed Channels: 9745-10705
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Data Set: 9
+Filter: 18.0012-20.9987 Wavelength (Angstrom)
+Bkg Scale 1: 0.1
+Bkg Scale 2: 0.1
+Noticed Channels: 8065-9264
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = Float32[16384]
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 1.0
+areascal       = 1.0
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = [1, 2]
+
+Background Data Set: 9:1
+Filter: 18.0012-20.9987 Wavelength (Angstrom)
+Noticed Channels: 8065-9264
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Background Data Set: 9:2
+Filter: 18.0012-20.9987 Wavelength (Angstrom)
+Noticed Channels: 8065-9264
+name           = ./data/mkn421/10669/tg_reprocess/hrcf10669N003_pha2.fits
+channel        = Float64[16384]
+counts         = Float64[16384]
+staterror      = None
+syserror       = None
+bin_lo         = Float64[16384]
+bin_hi         = Float64[16384]
+grouping       = None
+quality        = None
+exposure       = 10045.591231812
+backscal       = 5.0
+areascal       = None
+grouped        = False
+subtracted     = False
+units          = wavelength
+rate           = True
+plot_fac       = 0
+response_ids   = []
+background_ids = []
+
+Model: 1
+(10045.591231812 * MultiResponseSumModel(apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl)),apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl)),apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl)),apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl)),apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl)),apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl)),apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl)),apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl)),apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl)),apply_rmf(apply_arf(((xstbabs.tbabs * xspowerlaw.pl))))
+   Param        Type          Value          Min          Max      Units
+   -----        ----          -----          ---          ---      -----
+   tbabs.nH     frozen       0.0161            0       100000 10^22 atoms / cm^2
+   pl.PhoIndex  thawed      1.99945           -2            9           
+   pl.norm      thawed     0.375138            0        1e+24           
+
+Optimization Method: LevMar
+name     = levmar
+ftol     = 1.1920928955078125e-07
+xtol     = 1.1920928955078125e-07
+gtol     = 1.1920928955078125e-07
+maxfev   = None
+epsfcn   = 1.1920928955078125e-07
+factor   = 100.0
+numcores = 1
+verbose  = 0
+
+Statistic: WStat
+Poisson Log-likelihood function including background (XSPEC style).
+
+    This is equivalent to the XSPEC implementation of the
+    W statistic for CStat [1]_, and includes the background data in
+    the fit statistic. If a model is being fit to the background then
+    the CStat statistic should be used.
+
+    The following description is taken from [1]_.
+
+    Suppose that each bin in the background spectrum is given its own
+    parameter so that the background model is b_i = f_i. A standard fit
+    for all these parameters would be impractical; however there is an
+    analytical solution for the best-fit f_i in terms of the other
+    variables which can be derived by using the fact that the derivative
+    of the likelihood (L) will be zero at the best fit. Solving for the
+    f_i and substituting gives the profile likelihood::
+
+        W = 2 sum_(i=1)^N t_s m_i + (t_s + t_b) f_i -
+            S_i ln(t_s m_i + t_s f_i) - B_i ln(t_b f_i) -
+            S_i (1- ln(S_i)) - B_i (1 - ln(B_i))
+
+    where::
+
+        f_i = (S_i + B_i - (t_s + t_b) m_i + d_i) / (2 (t_s + t_b))
+        d_i = sqrt([(t_s + t_b) m_i - S_i - B_i]^2 +
+                   4(t_s + t_b) B_i m_i)
+
+    If any bin has S_i and/or B_i zero then its contribution to W (W_i)
+    is calculated as a special case. So, if S_i is zero then::
+
+        W_i = t_s m_i - B_i ln(t_b / (t_s + t_b))
+
+    If B_i is zero then there are two special cases. If
+    m_i < S_i / (t_s + t_b) then::
+
+        W_i = - t_b m_i - S_i ln(t_s / (t_s + t_b))
+
+    otherwise::
+
+        W_i = t_s m_i + S_i (ln(S_i) - ln(t_s m_i) - 1)
+
+    In practice, it works well for many cases but for weak sources can
+    generate an obviously wrong best fit. It is not clear why this happens
+    although binning to ensure that every bin contains at least one count
+    often seems to fix the problem. In the limit of large numbers of counts
+    per spectrum bin a second-order Taylor expansion shows that W tends to::
+
+        sum_(i=1)^N ( [S_i - t_s m_i - t_s f_i]^2 / (t_s (m_i + f_i)) +
+                      [B_i - t_b f_i]^2 / (t_b f_i) )
+
+    which is distributed as chi^2 with N - M degrees of freedom, where
+    the model m_i has M parameters (include the normalization).
+
+    References
+    ----------
+
+    .. [1] The description of the W statistic (`wstat`) in
+           https://heasarc.gsfc.nasa.gov/xanadu/xspec/manual/XSappendixStatistics.html
+
+    
+
+Fit:Dataset               = 1
+Method                = levmar
+Statistic             = wstat
+Initial fit statistic = 1715.04
+Final fit statistic   = 240.403 at function evaluation 13
+Data points           = 241
+Degrees of freedom    = 239
+Probability [Q-value] = 0.462351
+Reduced statistic     = 1.00587
+Change in statistic   = 1474.64
+   pl.PhoIndex    1.99945      +/- 0.433162    
+   pl.norm        0.375138     +/- 0.0543236   
+
+Confidence:Dataset               = 1
+Confidence Method     = confidence
+Iterative Fit Method  = None
+Fitting Method        = levmar
+Statistic             = wstat
+confidence 1-sigma (68.2689%) bounds:
+   Param            Best-Fit  Lower Bound  Upper Bound
+   -----            --------  -----------  -----------
+   pl.PhoIndex       1.99945     -2.14896     0.421419
+   pl.norm          0.375138   -0.0519049      0.14889
+
+

@@ -1,0 +1,71 @@
+#! /bin/bash
+
+wlo=$1
+whi=$2
+
+<<'COMMENT'
+. ./src/functions.bash
+screen -dmS fits-2 bash -c 'exec bash'
+for ((i=1; i<= $wn; i++))
+do
+  let wlo="wmin+(i-1)*winc"
+  let whi="wlo+winc"
+  screen -S fits-2 -X screen bash -c "time /bin/bash 0READMEs/05_README_fits_wrange $wlo $whi; exec bash"
+done
+screen -rS fits-2
+COMMENT
+
+. ~/.bash_aliases
+shopt -s expand_aliases
+
+ciao -o
+
+. src/functions.bash
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+hrccals=( qe_N0016_qeu_N0015 )
+
+force=1
+
+for src in $(sources)
+do
+    for o in $(source2obsids $src)
+    do
+        inst=$(instruments $o)
+
+	echo "$inst" | grep -qi acis || continue
+
+        parts=LEG
+        orders='neg pos'
+        echo "$inst" | grep -qi hetg && {
+            parts='HEG MEG'
+        }
+
+        for part in $parts
+        do
+            for order in $orders
+            do
+                if echo "$inst" | grep -qi hrc
+                then
+                    for hrccal in "${hrccals[@]}"
+                    do
+                        export ARFPATH=./arfs/"$hrccal"
+                        fdir=./fits/"$hrccal"
+                        [ $force -eq 0 -a -f $fdir/${o}_${part}_${order}_w${wlo}-${whi}_fsamp.npy ] && continue
+                        pdir="$fdir"/plots
+                        mkdir -p "$fdir" "$pdir"
+                        python src/fit.py ./data/$src/$o/tg_reprocess $part $order -f $fdir -p $pdir --wlo $wlo --whi $whi
+                    done # hrccals
+                else
+                    export ARFPATH=./arfs/acis
+                    fdir=./fits/acis
+                    [ $force -eq 0 -a -f $fdir/${o}_${part}_${order}_w${wlo}-${whi}_fsamp.npy ] && continue
+                    pdir="$fdir"/plots
+                    mkdir -p "$fdir" "$pdir"
+                    python src/fit.py ./data/$src/$o/tg_reprocess $part $order -f $fdir -p $pdir --wlo $wlo --whi $whi
+                fi
+            done # orders
+        done # parts
+    done # obsids
+done # sources

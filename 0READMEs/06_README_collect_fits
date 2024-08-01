@@ -1,0 +1,87 @@
+#! /bin/bash
+
+. src/functions.bash
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+outdir=./rdb
+mkdir -p $outdir
+
+mkdir -p $outdir/acis
+
+caldbs='qe_N0014_qeu_N0014 qe_N0015_qeu_N0014 qe_N0016_qeu_N0015'
+caldbs='qe_N0016_qeu_N0015'
+
+for c in $caldbs;
+do
+    mkdir -p $outdir/$c
+    mkdir -p results/$c
+done
+
+declare -A hrcrdbs
+
+for src in $(sources)
+do
+    hrcrdbs=( )
+    acisrdbs=''
+
+    str='' ; obsids=''
+    # special case of HRC-S only sequence
+    false && [ "$src" = mkn421 ] && {
+	str='hrcs_2018-01_'
+	obsids='-o 19444 20942 20943 20944'
+    }
+
+    for ((i=1; i <= $wn; i++))
+    do
+        let wlo="wmin+(i-1)*winc"
+        let whi="wlo+winc"
+
+	acisrdb="$outdir/acis/${src}_fits_w${wlo}-${whi}.rdb"
+        true && \
+	    env FITPATH=./fits/acis \
+	    	 /usr/bin/python3 src/collect_fits.py $src acis --wlo $wlo --whi $whi > $acisrdb
+	acisrdbs+=" $acisrdb"
+
+        for caldb in $caldbs
+        do
+	    hrcrdb="$outdir/$caldb/${src}_fits_w${wlo}-${whi}.rdb"
+            true && \
+		env FITPATH=./fits/$caldb \
+                    /usr/bin/python3 src/collect_fits.py $src hrc --wlo $wlo --whi $whi $obsids > $hrcrdb
+	    hrcrdbs["$caldb"]+=" $hrcrdb"
+        done
+    done
+
+    for caldb in $caldbs
+    do
+        true && /usr/bin/python3 src/scale_match_simple.py s l \
+            $acisrdbs ${hrcrdbs["$caldb"]} 
+        true && /usr/bin/python3 src/scale_match_simple.py s l \
+            $acisrdbs  ${hrcrdbs["$caldb"]} \
+            -p ./results/${caldb}/dist_simple_sl_${src}_winc_${winc}.pdf \
+            > ./results/${caldb}/factors_simple_sl_${src}_winc_${winc}.txt
+        false && echo /usr/bin/python3 src/scale_match_simple.py s l \
+            ./rdb/${caldb}/${src}_fits_w*.rdb  ./rdb/acis/${src}_fits_w*.rdb 
+        false && /usr/bin/python3 src/scale_match_simple.py s l \
+            ./rdb/${caldb}/${src}_fits_w*.rdb  ./rdb/acis/${src}_fits_w*.rdb \
+            -p ./results/${caldb}/dist_simple_sl_${src}.pdf \
+            > ./results/${caldb}/factors_simple_sl_${src}.txt
+    done
+
+    for band in 0 1 2 3 4 5
+    do
+	false && \
+	    env FITPATH=./fits/acis \
+		/usr/bin/python3 src/collect_fits.py $src acis -b $band > $outdir/acis/${src}_fits_B${band}.rdb
+
+        for caldb in $caldbs
+        do
+	    false && \
+		env FITPATH=./fits/$caldb \
+		    /usr/bin/python3 src/collect_fits.py $src hrc -b $band $obsids > $outdir/$caldb/${src}_fits_${str}B${band}.rdb
+
+        done
+    done
+done
+

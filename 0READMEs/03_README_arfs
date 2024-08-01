@@ -1,0 +1,103 @@
+#! /bin/bash
+
+obsids="$@"
+
+<<'COMMENT'
+. ./src/functions.bash
+. /data/legs/rpete/flight/analysis_functions/util.bash
+obsids=$(source2obsids mkn421)
+obsids=$(grep -h '^[0-9]' obsids/mkn421  | grep -i hrc | cut -f1)
+screen -dmS arfs bash -c 'exec bash'
+n=12
+for i in {1..12}
+do
+  o=$(i_of_n $i $n $obsids)
+  screen -S arfs -X screen bash -c "time /bin/bash 0READMEs/03_README_arfs $o; exec bash"
+done
+screen -rS arfs
+COMMENT
+
+. ~/.bash_aliases
+shopt -s expand_aliases
+
+ciao -o
+
+. /data/legs/rpete/flight/analysis_functions/caldb_files.bash
+. /data/legs/rpete/flight/analysis_functions/arfs.bash
+. src/functions.bash
+
+. /data/legs/rpete/flight/analysis_functions/tmppdir.bash
+
+qeu_dir=/data/legs/rpete/flight/hrcs_qeu/ARD
+qeu_versions=( 14 )
+qeu_versions=( 15 )
+
+qe_dir=/data/legs/rpete/flight/hrcs_qe
+qe_versions=( 14 15 )
+qe_versions=( 16 )
+
+force=1
+
+for o in $obsids
+do
+  inst=$(instruments $o)
+  src=$(obsid2source $o)
+
+  punlearn ardlib
+
+  indir="data/$src/$o/tg_reprocess"
+  rmf_dir=/data/legs/rpete/flight/rmfs
+
+  true && echo $inst | grep -qi hrc && {
+    pha2=$(ls "$indir"/*_pha2.fits)
+    maxorder=10
+
+    for ((i=0; i<${#qeu_versions[@]}; i++))
+    do
+      qeu_version=${qeu_versions[i]}
+      qeu_file=$(match_caldb_file "$pha2" qeu "${qeu_dir}/v${qeu_versions}/qeu" N00"${qeu_version}")
+      pset ardlib AXAF_HRC-S1_QEU_FILE="$qeu_file"'[AXAF_QEU1]'
+      pset ardlib AXAF_HRC-S2_QEU_FILE="$qeu_file"'[AXAF_QEU2]'
+      pset ardlib AXAF_HRC-S3_QEU_FILE="$qeu_file"'[AXAF_QEU3]'
+
+      for ((j=0; j<${#qe_versions[@]}; j++))
+      do
+        qe_version=${qe_versions[j]}
+	rmf_dir=/data/legs/rpete/flight/rmfs
+	[ "$qe_version" \< "N0014" ] && rmf_dir=/data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003
+	outdir=./arfs/"qe_N00${qe_version}_qeu_N00${qeu_version}"
+	echo $inst | grep -qi letg && {
+	  [ $force -eq 0 -a -f $outdir/${o}_LEG_1_garf.fits ] && continue
+	}
+	echo $inst $o | grep -qi hetg && {
+	  [ $force -eq 0 -a -f $outdir/${o}_MEG_1_garf.fits ] && continue
+	}
+	qe_file=$(match_caldb_file "$pha2" qe "${qe_dir}/N00${qe_version}/qe" N00"${qe_version}")
+	pset ardlib AXAF_HRC-S1_QE_FILE="$qe_file"'[AXAF_QE1]'
+	pset ardlib AXAF_HRC-S2_QE_FILE="$qe_file"'[AXAF_QE2]'
+	pset ardlib AXAF_HRC-S3_QE_FILE="$qe_file"'[AXAF_QE3]'
+
+	generate_garfs "$indir" "$outdir"
+      done
+
+      punlearn ardlib
+
+    done
+  }
+
+  # ACIS
+  true && echo $inst | grep -qi acis && {
+    maxorder=1
+    outdir=./arfs/acis
+    echo $inst $o | grep -qi letg && {
+      [ $force -eq 0 -a -f $outdir/${o}_LEG_1_garf.fits ] && continue
+    }
+    echo $inst $o | grep -qi hetg && {
+      [ $force -eq 0 -a -f $outdir/${o}_MEG_1_garf.fits ] && continue
+    }
+    generate_garfs "$indir" "$outdir"
+  }
+
+done
+
+punlearn ardlib

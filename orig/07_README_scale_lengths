@@ -1,0 +1,91 @@
+#! /bin/bash
+
+source functions.bash
+
+minmax() {
+    local src="$1"
+    local band="$2"
+    local epoch="$3"
+
+    local min=0
+    local max=15
+
+    [ "$src" == mkn421 -a $band -eq 0 -a $epoch -eq 0 ] && { min=2 ; max=10 ; }
+    [ "$src" == mkn421 -a $band -eq 0 -a $epoch -eq 2 ] && { min=9 ; }
+    [ "$src" == mkn421 -a $band -eq 0 -a $epoch -eq 3 ] && { max=8 ; }
+    [ "$src" == mkn421 -a $band -eq 0 -a $epoch -eq 4 ] && { max=10 ; }
+
+    [ "$src" == mkn421 -a $band -eq 2 -a $epoch -eq 0 ] && { min=5 ; }
+    [ "$src" == mkn421 -a $band -eq 2 -a $epoch -eq 1 ] && { min=5 ; }
+
+    [ "$src" == mkn421 -a $band -eq 3 -a $epoch -eq 0 ] && { min=4 ; max=13 ; }
+    [ "$src" == mkn421 -a $band -eq 3 -a $epoch -eq 1 ] && { min=6 ; }
+    [ "$src" == mkn421 -a $band -eq 3 -a $epoch -eq 3 ] && { max=8 ; }
+    [ "$src" == mkn421 -a $band -eq 3 -a $epoch -eq 4 ] && { min=5 ; }
+    [ "$src" == mkn421 -a $band -eq 3 -a $epoch -eq 5 ] && { min=5 ; }
+
+    [ "$src" == mkn421 -a $band -eq 4 -a $epoch -eq 1 ] && { min=2 ; max=10 ; }
+    [ "$src" == mkn421 -a $band -eq 4 -a $epoch -eq 2 ] && { min=2 ; }
+    [ "$src" == mkn421 -a $band -eq 4 -a $epoch -eq 4 ] && { max=10 ; }
+    [ "$src" == mkn421 -a $band -eq 4 -a $epoch -eq 0 ] && { max=10 ; }
+
+    [ "$src" == pks2155 -a $band -eq 0 -a $epoch -eq 0 ] && { max=11 ; }
+
+    [ "$src" == pks2155 -a $band -eq 3 -a $epoch -eq 0 ] && { min=3 ; }
+
+    #[ "$src" == mkn421 ] && [ "$epoch" == 2 ] && max=15
+    #[ "$src" == mkn421 ] && [ "$epoch" == 3 ] && min=0
+
+    #[ "$src" == pks2155 ] && [ "$epoch" == 0 ] && min=0
+    #[ "$src" == pks2155 ] && [ "$epoch" == 5 ] && max=15
+
+    echo $min $max
+}
+
+python=/usr/bin/python
+pdir=./plots/hrcs_scale
+mkdir -p "$pdir"
+
+#epochs='0 1 2 3 4 5'
+bands=0
+epochs='1 2 3 4 5'
+n=9
+
+for src in $(sources)
+do
+    for b in $bands
+    do
+	for e in $epochs
+	do
+	    #modelplot=
+	    #[ $e -eq 0 ] && modelplot=--models
+	    modelplot=--models
+	    read min max <<<$( minmax $src $b $e )
+	    mpirun -n $n $python scale_lengths.py $src -b $b -e $e --minscale $min --maxscale $max $modelplot hrc leg
+	done
+    done
+done
+
+mv lengths_*.pdf models_*.pdf "$pdir" 2>/dev/null
+
+for src in $(sources)
+do
+    for b in $bands
+    do
+	pdfjoin "$pdir"/lengths_${src}_B${b}_E{[1-9],0}.pdf -o /dev/stdout | pdfnup --nup 3x2 -o "$pdir"/lengths_${src}_B${b}.pdf
+    done
+done
+
+
+
+mpirun -n 9 python scale_lengths.py mkn421 -b 0 -e 0 --minscale -10 --maxscale 6 meg leg --model
+
+for epoch in 0 1 2 3 4 5
+do
+    mpirun -n 9 $python scale_lengths.py pks2155 -b 0 -e $epoch --minscale -20 --maxscale 0 meg hrc --model
+done
+#for epoch in 0 1 2 3 4 5 6
+for epoch in 1 2 3 4 5 6
+do
+    mpirun -n 9 python scale_lengths.py pks2155 -b 0 -e $epoch --minscale -10 --maxscale 10 meg leg --model
+done

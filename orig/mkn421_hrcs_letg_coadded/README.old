@@ -1,0 +1,68 @@
+#! /bin/bash
+
+ddir=./data
+mkdir -p $ddir
+
+odir=./output
+mkdir -p $odir
+
+obsids=`grep HRC ../obsids_mkn421 | grep '^[0-9]' | cut -f 1`
+
+order=neg
+minorder=9
+maxorder=9
+
+sign=''
+format='%02d'
+
+if [ $order == 'neg' ]
+then
+    sign='-'
+    format='%03d'
+fi
+
+for o in $obsids
+do
+
+    cp -a ../data/mkn421/$o/tg_reprocess/*_pha2.fits $ddir/${o}_${sign}`printf %02d $minorder`.pha2
+
+    i=$(($minorder+1))
+    while [ $i -le $maxorder ]
+    do
+	pha2=$ddir/${o}_`printf $format ${sign}$i`.pha2
+	cp $ddir/${o}_${sign}`printf %02d $minorder`.pha2 $pha2
+	(( i += 1 ))
+    done
+
+    i=$minorder
+    while [ $i -le $maxorder ]
+    do
+	pha2=$ddir/${o}_`printf $format ${sign}$i`.pha2
+	# rmf=$ddir/${o}_`printf $format ${sign}$i`.rmf
+	# garf=$ddir/${o}_`printf $format ${sign}$i`.garf
+
+	rmf=$( ls /data/legs/rpete/flight/xcal/data/mkn421/$o/tg_reprocess/LEG_${sign}$i.rmf )
+	garf=$( ls /data/legs/rpete/flight/xcal/data/mkn421/$o/tg_reprocess/*LEG_${sign}${i}_garf.fits )
+
+	dmhedit $pha2 filelist=none operation=add key=respfile value=\"\'$rmf\'\" comment='Grating Redistribution (LSF) file name (RMF)'
+	dmhedit $pha2 filelist=none operation=add key=ancrfile value=\"\'$garf\'\" comment='Ancillary response file name (ARF)'
+
+	(( i += 1 ))
+    done
+
+done
+
+i=$minorder
+while [ $i -le $maxorder ]
+do
+    str=`printf $format ${sign}$i`
+    filelist=`echo $obsids | perl -anle '$_ = "data/${_}_'$str'.pha2" for @F; print join ",", @F'`
+
+    echo combine_grating_spectra $filelist $odir/ order=${sign}$i clobber=yes
+    combine_grating_spectra $filelist $odir/ order=${sign}$i clobber=yes verbose=5
+
+    (( i += 1 ))
+done
+
+#rm -f $ddir/*0[2-9].pha2 $ddir/*10.pha2
+#rm -f output/*m[2-9].pha output/*m[2-9]_bkg.pha

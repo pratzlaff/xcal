@@ -1,0 +1,42 @@
+#! /bin/bash
+
+source functions.bash
+
+# Something in chips is causing the Xorg server to consume more and
+# more memory as the fits go on. Workaround for now is to use a dummy
+# Xorg server.
+#
+# d=11; Xorg -noreset +extension GLX +extension RANDR +extension RENDER -logfile ./$d.log -config ./xorg.conf :$d
+
+export ASCDS_OVERRIDE=1
+
+if [ `hostname` == 'legs' ]
+then
+#    export HEADAS=/usr/local/heasoft-6.13/x86_64-unknown-linux-gnu-libc2.17-0
+#    . $HEADAS/headas-init.sh
+    source /usr/local/ciao/bin/ciao.sh
+    PERL=perl
+else
+#    export HEADAS=/soft/heasoft/x86_64-pc-linux
+#    . $HEADAS/headas-init.sh
+    source /soft/ciao/bin/ciao.sh
+    PERL=/proj/axaf/bin/perl
+fi
+
+: ${NEWGAIN:=0} ; export NEWGAIN
+
+for src in $(sources)
+do
+    for o in $(source2obsids $src)
+    do
+	[ $NEWGAIN -eq 1 ] && instruments $o | grep -qi HRC && continue
+	[ $NEWGAIN -eq 1 ] && instruments $o | grep -qi HETG && continue
+
+	# reproduce the rmfs and garfs which went into creating
+	# version N0012 of the HRC-S QE
+	instruments $o | grep -qi HRC && hrcs_garfs $o 15
+
+#	sherpa_fit $o
+	# instruments $o | grep -qi HRC && xspec_fit $src $o
+    done
+done

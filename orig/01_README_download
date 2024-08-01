@@ -1,0 +1,29 @@
+#! /bin/bash
+
+#
+# download data
+#
+
+source functions.bash
+
+export ASCDS_OVERRIDE=1
+
+if [ `hostname` == 'legs' ]
+then
+    source /usr/local/ciao/bin/ciao.sh
+else
+    source /soft/ciao/bin/ciao.sh
+fi
+
+for src in $(sources)
+do
+    mkdir -p data/$src
+    cd data/$src
+    for o in $(source2obsids $src)
+    do
+	files=evt1,bpix,pbk,msk,flt,asol,bias,stat,mtl
+	instruments $o | grep -qi HRC && files=evt1,bpix,msk,flt,asol,dtf
+	download_chandra_obsid $o $files
+    done
+    cd -
+done

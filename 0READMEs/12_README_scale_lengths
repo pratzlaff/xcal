@@ -1,0 +1,96 @@
+#! /bin/bash
+
+. src/functions.bash
+
+export PYTHONPATH=/data/legs/rpete/flight/analysis_functions
+
+caldbs='qe_N0015_qeu_N0013'
+
+python=/usr/bin/python
+pdir=./data/pickle/scale_lengths
+pdfdir=./plots/scale_lengths
+
+declare -A epochs
+epochs[pks2155]='1 2 3 4 5'
+epochs[mkn421]='1 2 3 4 5 6 7 8 9'
+
+bands='0 2 3 4'
+
+n=10
+
+for caldb in $caldbs
+do
+    for src in $(sources)
+    do
+	for b in $bands
+	do
+	    for e in ${epochs[$src]}
+	    do
+		read min max <<<$( python3 src/minmax.py $src lengths $caldb $b $e )
+		mpirun --oversubscribe -n $n \
+		       $python src/scale_lengths.py \
+		       s l $e \
+		       ./rdb/acis/${src}_fits_B${b}.rdb \
+		       ./rdb/$caldb/${src}_fits_B${b}.rdb \
+		       --minscale $min --maxscale $max \
+		       --pdir $pdir/$caldb \
+		       --pdfdir $pdfdir/$caldb \
+		       --models
+
+	    done
+	done
+    done
+done
+
+exit
+
+# for src in $(sources)
+# do
+#     for b in $bands
+#     do
+# 	pdfjoin "$pdir"/lengths_${src}_B${b}_E{[1-9],0}.pdf -o /dev/stdout | pdfnup --nup 3x2 -o "$pdir"/lengths_${src}_B${b}.pdf
+#     done
+# done
+
+
+# MEG/LEG, mkn421
+mpirun --oversubscribe -n $n \
+       $python src/scale_lengths.py \
+       m l \
+       ./rdb/acis/mkn421_fits_B0.rdb \
+       --minscale -10 --maxscale 6 \
+       --pdir $pdir/acis \
+       --pdfdir $pdfdir/acis \
+       --models
+
+# MEG/LEG, pks2155
+for epoch in 0 1 2 3 4 5
+do
+    mpirun --oversubscribe -n $n \
+	   $python src/scale_lengths.py \
+	   m l \
+	   ./rdb/acis/pks2155_fits_B0.rdb \
+	   --minscale -10 --maxscale 10 \
+	   -e $epoch \
+	   --pdir $pdir/acis \
+	   --pdfdir $pdfdir/acis \
+	   --models
+done
+
+# MEG/HRC, pks2155
+for caldb in $caldbs
+do
+    for epoch in 0 1 2 3 4 5
+    do
+	mpirun --oversubscribe -n $n \
+	       $python src/scale_lengths.py \
+	       m s \
+	       ./rdb/acis/pks2155_fits_B0.rdb \
+	       ./rdb/$caldb/pks2155_fits_B0.rdb \
+	       --minscale -20 --maxscale 0 \
+	       -e $epoch \
+	       --pdir $pdir/$caldb \
+	       --pdfdir $pdfdir/$caldb \
+	       --models
+    done
+done

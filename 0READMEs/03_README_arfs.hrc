@@ -1,0 +1,71 @@
+#! /bin/bash
+
+. /data/legs/rpete/flight/analysis_functions/caldb_files.bash
+. /data/legs/rpete/flight/analysis_functions/arfs.bash
+. src/functions.bash
+
+export ASCDS_OVERRIDE=1
+[ `hostname` == 'legs' ] &&
+    . /usr/local/ciao/bin/ciao.sh ||
+    . /soft/ciao/bin/ciao.sh
+
+. /data/legs/rpete/flight/analysis_functions/tmppdir.bash
+
+qeu_dirs=( /data/legs/rpete/flight/qeu/ARD/v13/qeu )
+qeu_versions=( N0013 )
+
+qe_dir=/data/legs/rpete/flight/hrcs_qe
+qe_versions=( N0015 )
+
+for src in $(sources); do
+    for o in $(source2obsids "$src"); do
+	echo $o
+
+	punlearn ardlib
+
+	indir="data/$src/$o/tg_reprocess"
+	rmf_dir=/data/legs/rpete/flight/rmfs
+
+	true && instruments "$o" | grep -qi hrc && {
+            pha2=$(ls "$indir"/*_pha2.fits)
+	    maxorder=10
+
+	    for ((i=0; i<${#qeu_dirs[@]}; i++))
+	    do
+		qeu_dir=${qeu_dirs[i]}
+		qeu_version=${qeu_versions[i]}
+		qeu_file=$(match_caldb_file "$pha2" qeu "$qeu_dir" "$qeu_version")
+		pset ardlib AXAF_HRC-S1_QEU_FILE="$qeu_file"'[AXAF_QEU1]'
+		pset ardlib AXAF_HRC-S2_QEU_FILE="$qeu_file"'[AXAF_QEU2]'
+		pset ardlib AXAF_HRC-S3_QEU_FILE="$qeu_file"'[AXAF_QEU3]'
+
+	        for ((j=0; j<${#qe_versions[@]}; j++))
+	        do
+		    qe_version=${qe_versions[j]}
+		    rmf_dir=/data/legs/rpete/flight/rmfs
+		    [ "$qe_version" \< "N0014" ] && rmf_dir=/data/legs/rpete/flight/rmfs/HRC_lsfparm_N0003
+		    outdir=./arfs/"qe_${qe_version}_qeu_${qeu_version}"
+		    qe_file=$(match_caldb_file "$pha2" qe "${qe_dir}/${qe_version}/qe" "${qe_version}")
+		    pset ardlib AXAF_HRC-S1_QE_FILE="$qe_file"'[AXAF_QE1]'
+		    pset ardlib AXAF_HRC-S2_QE_FILE="$qe_file"'[AXAF_QE2]'
+		    pset ardlib AXAF_HRC-S3_QE_FILE="$qe_file"'[AXAF_QE3]'
+
+		    generate_garfs "$indir" "$outdir"
+                done
+
+		punlearn ardlib
+
+	    done
+	}
+
+	# ACIS
+	false && instruments "$o" | grep -qi acis && {
+	    maxorder=1
+	    outdir=./arfs/acis
+	    generate_garfs "$indir" "$outdir"
+	}
+
+    done
+done
+
+punlearn ardlib

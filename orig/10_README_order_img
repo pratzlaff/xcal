@@ -1,0 +1,72 @@
+#! /bin/bash
+
+source /usr/local/ciao/bin/ciao.sh
+
+: ${NEWGAIN:=0}
+
+obsids='15482 16474'
+
+for o in $obsids
+do
+    dir=/data/legs/rpete/flight/xcal/data/mkn421/$o
+
+    cd $dir
+
+    punlearn tg_resolve_events
+
+    newgain=''
+    [ $NEWGAIN -eq 1 ] && newgain=_newgain
+
+    tgrepro=tg_reprocess$newgain
+
+    evt1=`ls $tgrepro/acisf${o}*_evt1.fits | grep -v dstrk`
+    pha2=`ls $tgrepro/acisf${o}*_pha2.fits`
+    evt1a=`ls $tgrepro/acisf${o}*_evt1a.fits | grep -v flt1`
+    outfile=`echo $evt1 | sed 's/evt1/evt1a_noosip/'`
+    regionfile=`ls $tgrepro/acisf${o}*_evt1_L1a.fits`
+    acaofffile=`ls ./primary/pcadf*.fits.gz`
+
+    tg_resolve_events "infile=$evt1" "outfile=$outfile" "regionfile=$regionfile" "acaofffile=$acaofffile" 'eventdef=)stdlev1_ACIS' clobber=yes osipfile=NONE
+
+    ssh -AXY ascda3 "
+source /soft/ciao/bin/ciao.sh;
+cd $dir;
+cat - <<EOP | /soft/isis/bin/isis
+add_to_isis_load_path(\"/data/legs/rpete/flight/tg_order_img/tgcat/scripts\");
+.load tgcat
+mk_osum_img(\"$outfile\", \"osort_img_noosip$newgain\", \"$pha2\");
+mk_osum_img(\"$evt1a\", \"osort_img_osip$newgain\", \"$pha2\");
+EOP
+"
+
+    crop="15 2 140 4 wcs"
+
+    ds9 -geometry 900x1200 \
+	-colorbar no \
+	-zoom 2 \
+	-scale mode 99.5 \
+	-grid yes \
+	-grid type publication \
+	-grid labels yes \
+	-grid title gap 10 \
+	-grid title def no \
+	-grid labels def1 no \
+	-grid labels def2 no \
+	-cmap Heat \
+	osort_img_osip${newgain}_leg_all.fits \
+	osort_img_osip${newgain}_leg_123.fits \
+	osort_img_noosip${newgain}_leg_all.fits \
+	osort_img_noosip${newgain}_leg_123.fits \
+	-tile mode grid \
+	-frame 1 -crop $crop -grid title text "$o, OSIP: All Orders" -grid labels text2 Order \
+	-frame 2 -crop $crop -grid title text "$o OSIP: Orders 1-3" \
+	-frame 3 -crop $crop -grid title text "$o, No OSIP: All Orders" -grid labels text1 TG_MLAM -grid labels text2 Order \
+	-frame 4 -crop $crop -grid title text "$o, No OSIP: Orders 1-3" -grid labels text1 TG_MLAM \
+	-print destination file \
+	-print filename osort_img${newgain}.ps \
+	-print \
+	-exit
+
+    cd -
+done
+
