@@ -30,7 +30,7 @@ sub bin_times {
   my $t = $t1;
   do {
     push @start, $t;
-    $t += $tbin;
+    $t = $t+$tbin;
     $t = $t2 if $t > $t2;
     push @stop, $t;
 
